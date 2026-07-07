@@ -1,0 +1,65 @@
+networks:
+  app-rede:
+    driver: bridge
+
+volumes:
+  rabbitmq-data:
+  mongo-data:
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-rede
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        mongosh --quiet --eval
+        "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=user-tsi
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - app-rede
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  app:
+    image: haranho/trabalhofinaldistribuido:latest
+    container_name: trabalhofinaldistribuido
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=user-tsi
+    networks:
+      - app-rede
+    restart: unless-stopped
