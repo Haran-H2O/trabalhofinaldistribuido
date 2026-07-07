@@ -46,20 +46,3 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-
-  app:
-    image: haranho/trabalhofinaldistribuido:latest
-    container_name: trabalhofinaldistribuido
-    ports:
-      - "8080:8080"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=admin
-      - SPRING_RABBITMQ_PASSWORD=user-tsi
-    networks:
-      - app-rede
-    restart: unless-stopped
