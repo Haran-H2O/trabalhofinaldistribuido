@@ -1,9 +1,10 @@
 package br.com.utfpr.trabalhofinaldistribuido.mensagens;
 
+import java.util.List;
+
 public class PedidoMessage {
     private Long pedidoId;
-    private String produtoId;
-    private Integer quantidade;
+    private List<ItemPedido> itens;
     private Double valor;
     private String email;
     private String endereco;
@@ -11,10 +12,9 @@ public class PedidoMessage {
 
     public PedidoMessage() {}
 
-    public PedidoMessage(Long pedidoId, String produtoId, Integer quantidade, Double valor, String email, String endereco, Boolean simularErro) {
+    public PedidoMessage(Long pedidoId, List<ItemPedido> itens, Double valor, String email, String endereco, Boolean simularErro) {
         this.pedidoId = pedidoId;
-        this.produtoId = produtoId;
-        this.quantidade = quantidade;
+        this.itens = itens;
         this.valor = valor;
         this.email = email;
         this.endereco = endereco;
@@ -23,10 +23,8 @@ public class PedidoMessage {
 
     public Long getPedidoId() { return pedidoId; }
     public void setPedidoId(Long pedidoId) { this.pedidoId = pedidoId; }
-    public String getProdutoId() { return produtoId; }
-    public void setProdutoId(String produtoId) { this.produtoId = produtoId; }
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+    public List<ItemPedido> getItens() { return itens; }
+    public void setItens(List<ItemPedido> itens) { this.itens = itens; }
     public Double getValor() { return valor; }
     public void setValor(Double valor) { this.valor = valor; }
     public String getEmail() { return email; }

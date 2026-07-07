@@ -2,6 +2,7 @@ package br.com.utfpr.trabalhofinaldistribuido.produtos.provider;
 
 import br.com.utfpr.trabalhofinaldistribuido.mensagens.CompraConcluidaMessage;
 import br.com.utfpr.trabalhofinaldistribuido.mensagens.EstoqueMessage;
+import br.com.utfpr.trabalhofinaldistribuido.mensagens.ItemPedido;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -43,12 +44,14 @@ public class ProdutosService {
 
     @RabbitListener(queues = "fila.estoque")
     public void baixarEstoque(EstoqueMessage msg) {
-        System.out.println("[← FILA] fila.estoque | baixa de " + msg.getQuantidade() + "x " + msg.getProdutoId());
-        buscarPorId(msg.getProdutoId()).ifPresent(p -> {
-            int novo = p.getQuantidadeEmEstoque() - msg.getQuantidade();
-            p.setQuantidadeEmEstoque(Math.max(0, novo));
-            System.out.println("ESTOQUE ATUALIZADO: " + p.getNome() + " | novo estoque: " + p.getQuantidadeEmEstoque());
-        });
+        for (ItemPedido item : msg.getItens()) {
+            System.out.println("[← FILA] fila.estoque | baixa de " + item.getQuantidade() + "x " + item.getProdutoId());
+            buscarPorId(item.getProdutoId()).ifPresent(p -> {
+                int novo = p.getQuantidadeEmEstoque() - item.getQuantidade();
+                p.setQuantidadeEmEstoque(Math.max(0, novo));
+                System.out.println("ESTOQUE ATUALIZADO: " + p.getNome() + " | novo estoque: " + p.getQuantidadeEmEstoque());
+            });
+        }
 
         System.out.println("[→ FILA] fila.compra.concluida | pedido #" + msg.getPedidoId());
         rabbitTemplate.convertAndSend("fila.compra.concluida", new CompraConcluidaMessage(msg.getPedidoId()));

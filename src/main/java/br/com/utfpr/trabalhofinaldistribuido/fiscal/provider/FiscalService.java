@@ -30,11 +30,10 @@ public class FiscalService {
             "NF " + chaveNF + " disponível"
         ));
 
-        System.out.println("[→ FILA] fila.estoque | baixa de " + msg.getQuantidade() + "x " + msg.getProdutoId());
+        System.out.println("[→ FILA] fila.estoque | baixa de " + msg.getItens().size() + " item(ns) do pedido #" + msg.getPedidoId());
         rabbitTemplate.convertAndSend("fila.estoque", new EstoqueMessage(
             msg.getPedidoId(),
-            msg.getProdutoId(),
-            msg.getQuantidade()
+            msg.getItens()
         ));
     }
 }

@@ -1,9 +1,11 @@
 package br.com.utfpr.trabalhofinaldistribuido.eventos.provider;
 
+import br.com.utfpr.trabalhofinaldistribuido.mensagens.ItemPedido;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "pedidos")
 public class Pedido {
@@ -11,8 +13,7 @@ public class Pedido {
     @Id
     private String id;
     private Long pedidoId;
-    private String produtoId;
-    private Integer quantidade;
+    private List<ItemPedido> itens;
     private Double valor;
     private String email;
     private String endereco;
@@ -27,10 +28,8 @@ public class Pedido {
     public void setId(String id) { this.id = id; }
     public Long getPedidoId() { return pedidoId; }
     public void setPedidoId(Long pedidoId) { this.pedidoId = pedidoId; }
-    public String getProdutoId() { return produtoId; }
-    public void setProdutoId(String produtoId) { this.produtoId = produtoId; }
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+    public List<ItemPedido> getItens() { return itens; }
+    public void setItens(List<ItemPedido> itens) { this.itens = itens; }
     public Double getValor() { return valor; }
     public void setValor(Double valor) { this.valor = valor; }
     public String getEmail() { return email; }

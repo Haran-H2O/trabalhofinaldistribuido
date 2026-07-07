@@ -115,14 +115,12 @@ async function realizarCompra() {
     if (cep.length !== 8) { alert('Informe um CEP válido'); return; }
     if (cartaoNumero.length < 13) { alert('Informe o número do cartão'); return; }
 
-    const primeiroItem = carrinho[0];
     const btn = document.getElementById('btn-comprar');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Processando...';
 
     const payload = {
-        produtoId: primeiroItem.id,
-        quantidade: primeiroItem.quantidade,
+        itens: carrinho.map(c => ({ produtoId: c.id, quantidade: c.quantidade })),
         cep: cep,
         email: email,
         cartao: cartaoNumero,
@@ -136,6 +134,10 @@ async function realizarCompra() {
             body: JSON.stringify(payload)
         });
         const data = await resp.json();
+        if (data.status !== 'ERRO') {
+            carrinho = [];
+            renderCarrinho();
+        }
         exibirResultado(data);
     } catch (e) {
         alert('Erro ao processar compra: ' + e.message);

@@ -1,28 +1,26 @@
 package br.com.utfpr.trabalhofinaldistribuido.mensagens;
 
+import java.util.List;
+
 public class FiscalMessage {
     private Long pedidoId;
-    private String produtoId;
-    private Integer quantidade;
+    private List<ItemPedido> itens;
     private Double valorTotal;
     private String email;
 
     public FiscalMessage() {}
 
-    public FiscalMessage(Long pedidoId, String produtoId, Integer quantidade, Double valorTotal, String email) {
+    public FiscalMessage(Long pedidoId, List<ItemPedido> itens, Double valorTotal, String email) {
         this.pedidoId = pedidoId;
-        this.produtoId = produtoId;
-        this.quantidade = quantidade;
+        this.itens = itens;
         this.valorTotal = valorTotal;
         this.email = email;
     }
 
     public Long getPedidoId() { return pedidoId; }
     public void setPedidoId(Long pedidoId) { this.pedidoId = pedidoId; }
-    public String getProdutoId() { return produtoId; }
-    public void setProdutoId(String produtoId) { this.produtoId = produtoId; }
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+    public List<ItemPedido> getItens() { return itens; }
+    public void setItens(List<ItemPedido> itens) { this.itens = itens; }
     public Double getValorTotal() { return valorTotal; }
     public void setValorTotal(Double valorTotal) { this.valorTotal = valorTotal; }
     public String getEmail() { return email; }

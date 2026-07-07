@@ -10,10 +10,6 @@ public class JerseyConfig extends ResourceConfig {
         packages(
             "br.com.utfpr.trabalhofinaldistribuido.produtos.provider",
             "br.com.utfpr.trabalhofinaldistribuido.cep.provider",
-            "br.com.utfpr.trabalhofinaldistribuido.pagamento.provider",
-            "br.com.utfpr.trabalhofinaldistribuido.email.provider",
-            "br.com.utfpr.trabalhofinaldistribuido.fiscal.provider",
-            "br.com.utfpr.trabalhofinaldistribuido.entrega.provider",
             "br.com.utfpr.trabalhofinaldistribuido.loja.provider",
             "br.com.utfpr.trabalhofinaldistribuido.eventos.provider"
         );

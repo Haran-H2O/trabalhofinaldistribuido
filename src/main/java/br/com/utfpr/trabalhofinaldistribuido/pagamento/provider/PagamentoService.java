@@ -40,8 +40,7 @@ public class PagamentoService {
         System.out.println("[→ FILA] fila.fiscal | pedido #" + pedido.getPedidoId() + " para emissão de NF");
         rabbitTemplate.convertAndSend("fila.fiscal", new FiscalMessage(
             pedido.getPedidoId(),
-            pedido.getProdutoId(),
-            pedido.getQuantidade(),
+            pedido.getItens(),
             pedido.getValor(),
             pedido.getEmail()
         ));
@@ -49,8 +48,6 @@ public class PagamentoService {
         System.out.println("[→ FILA] fila.entrega | pedido #" + pedido.getPedidoId() + " para logística");
         rabbitTemplate.convertAndSend("fila.entrega", new EntregaMessage(
             pedido.getPedidoId(),
-            pedido.getProdutoId(),
-            pedido.getQuantidade(),
             pedido.getEndereco(),
             pedido.getEmail()
         ));

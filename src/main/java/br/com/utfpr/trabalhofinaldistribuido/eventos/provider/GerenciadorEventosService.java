@@ -2,6 +2,7 @@ package br.com.utfpr.trabalhofinaldistribuido.eventos.provider;
 
 import br.com.utfpr.trabalhofinaldistribuido.mensagens.CompraConcluidaMessage;
 import br.com.utfpr.trabalhofinaldistribuido.mensagens.EmailMessage;
+import br.com.utfpr.trabalhofinaldistribuido.mensagens.ItemPedido;
 import br.com.utfpr.trabalhofinaldistribuido.mensagens.PedidoMessage;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -21,6 +22,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,8 +68,14 @@ public class GerenciadorEventosService {
 
     private void processarNovoPedido(Document doc) {
         Long pedidoId = doc.getLong("pedidoId");
-        String produtoId = doc.getString("produtoId");
-        Integer quantidade = doc.getInteger("quantidade");
+        List<ItemPedido> itens = new ArrayList<>();
+        for (Document itemDoc : doc.getList("itens", Document.class)) {
+            itens.add(new ItemPedido(
+                itemDoc.getString("produtoId"),
+                itemDoc.getInteger("quantidade"),
+                itemDoc.getDouble("precoUnitario")
+            ));
+        }
         Double valor = doc.getDouble("valor");
         String email = doc.getString("email");
         String endereco = doc.getString("endereco");
@@ -86,7 +94,7 @@ public class GerenciadorEventosService {
 
         System.out.println("[→ FILA] fila.pagamento | pedido #" + pedidoId);
         rabbitTemplate.convertAndSend("fila.pagamento", new PedidoMessage(
-            pedidoId, produtoId, quantidade, valor, email, endereco, simularErro
+            pedidoId, itens, valor, email, endereco, simularErro
         ));
     }
 

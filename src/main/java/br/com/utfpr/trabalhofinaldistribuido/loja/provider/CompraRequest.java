@@ -1,8 +1,9 @@
 package br.com.utfpr.trabalhofinaldistribuido.loja.provider;
 
+import java.util.List;
+
 public class CompraRequest {
-    private String produtoId;
-    private Integer quantidade;
+    private List<ItemCompraRequest> itens;
     private String cep;
     private String email;
     private String cartao;
@@ -10,10 +11,8 @@ public class CompraRequest {
 
     public CompraRequest() {}
 
-    public String getProdutoId() { return produtoId; }
-    public void setProdutoId(String produtoId) { this.produtoId = produtoId; }
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+    public List<ItemCompraRequest> getItens() { return itens; }
+    public void setItens(List<ItemCompraRequest> itens) { this.itens = itens; }
     public String getCep() { return cep; }
     public void setCep(String cep) { this.cep = cep; }
     public String getEmail() { return email; }
